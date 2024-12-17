@@ -1,6 +1,4 @@
-// import moment from 'moment';
-// import crypto from 'crypto-js';
-// import * as uuid from 'uuid';
+
 import WebApiSignature from "./WebApiSignature"
 
 /**
@@ -13,7 +11,10 @@ export default abstract class WebApiSvcBase {
     private _secretKey: string;
 
     /**
-     *
+     * Constructor
+     * @param baseUrl The base URL of the api, e.g. "http://foo.com/v1"
+     * @param clientId The API client id.
+     * @param secretKey The API client secret key.
      */
     constructor(baseUrl: string, clientId: string, secretKey: string) {
 
@@ -22,6 +23,12 @@ export default abstract class WebApiSvcBase {
         this._secretKey = secretKey;
     }
 
+    /**
+     * Builds the request secure URL and RequestInit object to pass to `fetch()`.
+     * @param method The HTTP method to use, e.g. "GET", "POST" etc.
+     * @param endpointPath The root-relative path of the API endpoint, e.g. "/widgets/fetchall".
+     * @returns A tuple containing the secure URL and `RequestInit` object to pass to `fetch()`.
+     */
     protected BuildRequest(method: string, endpointPath: string): [secureUrl: string, reqInit: RequestInit] {
 
         let apiSig = new WebApiSignature(this._baseUrl + endpointPath);
